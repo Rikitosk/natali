@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Имя Фамилия — Портфолио</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ваш основной стиль (можно оставить пустым) -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- ====================  ДИЗАЙН ШАПКИ И СЕРДЕЧНЫЙ ДОЖДЬ  ==================== -->
+    <style>
+        :root{
+            --c-pink   : #ffd1dc;   /* светло‑розовый */
+            --c-lav   : #e6e6ff;   /* лавандовый */
+            --c-text  : #4a4a4a;   /* общий цвет текста */
+        }
+
+        /* ---------- ФОН СТРАНИЦЫ ---------- */
+        body{
+            margin:0;
+            min-height:100vh;
+            font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+            color:var(--c-text);
+            /* градиент + узор‑цветок (декор) */
+            background:
+                linear-gradient(135deg,var(--c-pink) 0%,var(--c-lav) 100%),
+                url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+<path d='M50 15 L58 35 L80 35 L63 50 L70 73 L50 60 L30 73 L37 50 L20 35 L42 35 Z'\
+fill='%23ffb6c1'/>\
+</svg>") repeat;
+            background-size: cover, 120px 120px;
+            overflow-x:hidden;           /* скрываем горизонтальный скролл от анимаций */
+        }
+
+        /* ---------- Слой со «сердечным дождём» ---------- */
+        .heartfield{
+            position:fixed;
+            inset:0;                     /* покрывает всё окно */
+            pointer-events:none;         /* не мешает кликам */
+            overflow:hidden;
+            z-index: 999;               /* над шапкой, но под модальными окнами */
+        }
+        .heart{
+            position:absolute;
+            top:-2rem;                    /* стартуем чуть выше окна */
+            font-family:"Arial",sans-serif;
+            user-select:none;
+            will-change:transform,opacity;
+            animation-name: fall;
+            animation-timing-function:linear;
+            animation-iteration-count: infinite;
+        }
+
+        /* Анимация «падающих» (downward) сердечек */
+        @keyframes fall{
+            0%   {transform:translateY(0);        opacity:0;}
+            10%  {opacity:1;}
+            100% {transform:translateY(110vh);   opacity:0;}
+        }
+
+        /* ---------- Шапка (hero) ---------- */
+        .hero{
+            position:relative;            /* нужен только для центрирования контента */
+            height:250px;                /* меняйте под свои нужды */
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            color:#fff;
+            text-shadow:0 2px 8px rgba(0,0,0,.6);
+            /* если хотите отдельный фон внутри шапки – закомментируйте ниже */
+            /* background: rgba(255,255,255,0.1); */
+            z-index:1;                   /* поверх .heartfield */
+        }
+        .hero h1{
+            font-size:2.8rem;
+            margin:0;
+        }
+        .hero p{
+            margin:.4rem 0 0;
+            font-size:1.2rem;
+        }
+
+        /* ---------- Карточка (основной контент) ---------- */
+        .card{
+            max-width:380px;
+            margin:3rem auto 0;
+            padding:2rem 1.5rem;
+            background:rgba(255,255,255,0.88);
+            border-radius:12px;
+            text-align:center;
+            box-shadow:0 8px 24px rgba(0,0,0,0.12);
+        }
+        .card .avatar{
+            width:120px;height:120px;
+            border-radius:50%;
+            object-fit:cover;
+            margin-bottom:1rem;
+            box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        }
+        .card h1{margin:.5rem 0 0;font-size:1.8rem;color:#333;}
+        .card .tagline{margin:.4rem 0 1rem;color:#555;}
+        .card .links a{
+            display:inline-block;
+            padding:.6rem 1.2rem;
+            background:#ff8fab;
+            color:#fff;
+            border-radius:30px;
+            text-decoration:none;
+            transition:background .3s;
+        }
+        .card .links a:hover{background:#ff6f95;}
+
+        /* ---------- Галерея ---------- */
+        .gallery{
+            max-width:960px;
+            margin:3rem auto;
+            padding:0 1rem;
+        }
+        .gallery h2{
+            text-align:center;
+            margin-bottom:1rem;
+            font-size:1.6rem;
+            color:#333;
+        }
+        .grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+            gap:12px;
+        }
+        .grid a img{
+            width:100%;height:auto;
+            display:block;
+            border-radius:8px;
+            transition:transform .3s;
+        }
+        .grid a:hover img{transform:scale(1.05);}
+    </style>
+</head>
+
+<body>
+
+    <!-- Слой со «сердечным дождём» (он будет над всем, но под интерактивными элементами) -->
+    <div class="heartfield"></div>
+
+    <!-- Основная карточка‑приветствие -->
+    <section class="card">
+        <img src="img/photo.jpg" alt="Портрет Имя Фамилия" class="avatar">
+        <h1>Самая лучшая булочка</h1>
+        <p class="tagline">❤️❤️❤️❤️❤️</p>
+        <nav class="links">
+            <a href="https://www.instagram.com/natal_905/" target="_blank">Нажми на меня</a>
+        </nav>
+    </section>
+
+    <!-- Галерея -->
+    <section class="gallery">
+        <h2>Фоточки</h2>
+        <div class="grid">
+            <a href="img/photo‑thumb1.jpg" data-lightbox="gallery"><img src="img/photo‑thumb1.jpg" alt="Снимок 1"></a>
+            <a href="img/photo‑thumb2.jpg" data-lightbox="gallery"><img src="img/photo‑thumb2.jpg" alt="Снимок 2"></a>
+            <a href="img/photo‑thumb3.jpg" data-lightbox="gallery"><img src="img/photo‑thumb3.jpg" alt="Снимок 3"></a>
+        </div>
+    </section>
+
+    <!-- ====================  СКРИПТ ДЛЯ ГЕНЕРАЦИИ СЕРДЕЧЕК  ==================== -->
+    <script>
+        /* -----------------------------------------------------------------
+           Параметры «сердечек». При желании меняйте любые из них.
+              HEART_COUNT  – сколько одновременно будет на экране (≈ 70‑100)
+              MIN_SIZE     – минимальный размер в пикселях
+              MAX_SIZE     – максимальный размер в пикселях
+              MIN_SPEED    – минимальная «падения» (сек)
+              MAX_SPEED    – максимальная «падения» (сек)
+              MAX_DELAY    – максимальная случайная задержка перед стартом (сек)
+           ----------------------------------------------------------------- */
+        const HEART_COUNT = 80;
+        const MIN_SIZE   = 12;   // px
+        const MAX_SIZE   = 34;   // px
+        const MIN_SPEED  = 5;    // sec
+        const MAX_SPEED  = 13;   // sec
+        const MAX_DELAY  = 6;    // sec
+
+        // Вариативные эмодзи‑сердца (можно добавить свои)
+        const HEARTS = ['❤️','💖','💗','💘','💙','💚','💛','💜','🧡','❣','💞','💕'];
+
+        const field = document.querySelector('.heartfield');
+
+        for (let i = 0; i < HEART_COUNT; i++) {
+            const el = document.createElement('div');
+            el.className = 'heart';
+            el.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
+
+            // случайный размер
+            const size = Math.random() * (MAX_SIZE - MIN_SIZE) + MIN_SIZE;
+            el.style.fontSize = `${size}px`;
+
+            // случайная позиция по горизонтали (0‑100 vw)
+            el.style.left = Math.random() * 100 + 'vw';
+
+            // случайная длительность анимации (падения)
+            const speed = Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
+            el.style.animationDuration = `${speed}s`;
+
+            // случайная задержка, чтобы падения были непрерывными
+            const delay = Math.random() * MAX_DELAY;
+            el.style.animationDelay = `${delay}s`;
+
+            // небольшая вариация цвета – все оттенки розово‑красного
+            const hue = Math.random() * 20 + 340; // от 340° до 360° → розово‑красный
+            const sat = Math.random() * 20 + 70; // 70‑90%
+            const lig = Math.random() * 20 + 80; // 80‑100%
+            el.style.color = `hsl(${hue},${sat}%,${lig}%)`;
+
+            field.appendChild(el);
+        }
+    </script>
+</body>
+</html>
