@@ -2,203 +2,220 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- ваш оригинальный css (для ПК) -->
+    <title>Имя Фамилия — Портфолио</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- ваш основной стиль (можно оставить пустым) -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- ==== Небольшие доп. стили, включая mobile‑адаптацию ==== -->
+    <!-- ====================  ДИЗАЙН ШАПКИ И СЕРДЕЧНЫЙ ДОЖДЬ  ==================== -->
     <style>
-        /* ---------- 1️⃣ Сброс базовых отступов (уже был у вас) ---------- */
-        *,
-        *::before,
-        *::after { box-sizing:border-box; margin:0; }
+        :root{
+            --c-pink   : #ffd1dc;   /* светло‑розовый */
+            --c-lav   : #e6e6ff;   /* лавандовый */
+            --c-text  : #4a4a4a;   /* общий цвет текста */
+        }
 
-        /* ---------- 2️⃣ Фоновый слой (удобно без flex‑центрирования) ---------- */
+        /* ---------- ФОН СТРАНИЦЫ ---------- */
         body{
+            margin:0;
             min-height:100vh;
-            background:#f5f5f5;
             font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
+            color:var(--c-text);
+            /* градиент + узор‑цветок (декор) */
+            background:
+                linear-gradient(135deg,var(--c-pink) 0%,var(--c-lav) 100%),
+                url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>\
+<path d='M50 15 L58 35 L80 35 L63 50 L70 73 L50 60 L30 73 L37 50 L20 35 L42 35 Z'\
+fill='%23ffb6c1'/>\
+</svg>") repeat;
+            background-size: cover, 120px 120px;
+            overflow-x:hidden;           /* скрываем горизонтальный скролл от анимаций */
         }
 
-        /* ---------- 3️⃣ Шапка‑hero (графика для ПК и мобильных) ---------- */
+        /* ---------- Слой со «сердечным дождём» ---------- */
+        .heartfield{
+            position:fixed;
+            inset:0;                     /* покрывает всё окно */
+            pointer-events:none;         /* не мешает кликам */
+            overflow:hidden;
+            z-index: 999;               /* над шапкой, но под модальными окнами */
+        }
+        .heart{
+            position:absolute;
+            top:-2rem;                    /* стартуем чуть выше окна */
+            font-family:"Arial",sans-serif;
+            user-select:none;
+            will-change:transform,opacity;
+            animation-name: fall;
+            animation-timing-function:linear;
+            animation-iteration-count: infinite;
+        }
+
+        /* Анимация «падающих» (downward) сердечек */
+        @keyframes fall{
+            0%   {transform:translateY(0);        opacity:0;}
+            10%  {opacity:1;}
+            100% {transform:translateY(110vh);   opacity:0;}
+        }
+
+        /* ---------- Шапка (hero) ---------- */
         .hero{
-            width:100%;
-            padding:4rem 1rem;                     /* обычный отступ для ПК   */
-            background:linear-gradient(135deg,#ffd1dc,#e6e6ff);
-            color:#fff;
+            position:relative;            /* нужен только для центрирования контента */
+            height:250px;                /* меняйте под свои нужды */
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
             text-align:center;
-            box-shadow:0 4px 12px rgba(0,0,0,.1);
+            color:#fff;
+            text-shadow:0 2px 8px rgba(0,0,0,.6);
+            /* если хотите отдельный фон внутри шапки – закомментируйте ниже */
+            /* background: rgba(255,255,255,0.1); */
+            z-index:1;                   /* поверх .heartfield */
         }
-        .hero h1{font-size:2.6rem;margin:0;}
-        .hero .tagline{font-size:1.2rem;margin-top:.5rem;}
+        .hero h1{
+            font-size:2.8rem;
+            margin:0;
+        }
+        .hero p{
+            margin:.4rem 0 0;
+            font-size:1.2rem;
+        }
 
-        /* ---------- 4️⃣ Карточка (ваш оригинальный стиль) ---------- */
+        /* ---------- Карточка (основной контент) ---------- */
         .card{
-            max-width:320px;
+            max-width:380px;
             margin:3rem auto 0;
             padding:2rem 1.5rem;
-            background:#fff;
-            border-radius:1rem;
+            background:rgba(255,255,255,0.88);
+            border-radius:12px;
             text-align:center;
-            box-shadow:0 8px 20px rgba(0,0,0,.08);
+            box-shadow:0 8px 24px rgba(0,0,0,0.12);
         }
-
-        .avatar{
-            width:180px;height:180px;
+        .card .avatar{
+            width:120px;height:120px;
             border-radius:50%;
             object-fit:cover;
-            border:4px solid #fff;
-            box-shadow:0 4px 12px rgba(0,0,0,.1);
-            filter:grayscale(100%);
-            transition:filter .5s ease, transform .5s ease;
+            margin-bottom:1rem;
+            box-shadow:0 4px 12px rgba(0,0,0,0.15);
         }
-        .avatar:hover{
-            filter:grayscale(0);
-            transform:scale(1.02);
+        .card h1{margin:.5rem 0 0;font-size:1.8rem;color:#333;}
+        .card .tagline{margin:.4rem 0 1rem;color:#555;}
+        .card .links a{
+            display:inline-block;
+            padding:.6rem 1.2rem;
+            background:#ff8fab;
+            color:#fff;
+            border-radius:30px;
+            text-decoration:none;
+            transition:background .3s;
         }
+        .card .links a:hover{background:#ff6f95;}
 
-        /* ---------- 5️⃣ Галерея (ваш оригинальный стиль) ---------- */
-        .gallery{background:#fff;padding:3rem 1rem;text-align:center;}
-        .gallery h2{font-size:2.2rem;margin-bottom:2rem;}
+        /* ---------- Галерея ---------- */
+        .gallery{
+            max-width:960px;
+            margin:3rem auto;
+            padding:0 1rem;
+        }
+        .gallery h2{
+            text-align:center;
+            margin-bottom:1rem;
+            font-size:1.6rem;
+            color:#333;
+        }
         .grid{
             display:grid;
             grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-            gap:1rem;
-            max-width:1200px;
-            margin:0 auto;
+            gap:12px;
         }
         .grid a img{
-            width:100%;height:100%;
-            object-fit:cover;
-            border-radius:.5rem;
-            transition:transform .3s,box-shadow .3s;
+            width:100%;height:auto;
+            display:block;
+            border-radius:8px;
+            transition:transform .3s;
         }
-        .grid a:hover img{
-            transform:scale(1.05);
-            box-shadow:0 8px 20px rgba(0,0,0,.15);
-        }
-
-        /* ---------- 6️⃣ Бабочки (общие стили) ---------- */
-        #butterfly-container{
-            position:fixed;
-            inset:0;
-            pointer-events:none;
-            overflow:hidden;
-            z-index:9999;
-        }
-        .butterfly{
-            position:absolute;
-            font-size:var(--size,40px);           /* 40 px → 1 em = 40 px */
-            top:var(--y-start);
-            transform:scaleX(var(--scale-x,1));
-            will-change:transform,opacity;
-            animation:
-                fly      var(--duration) linear    infinite var(--delay),
-                flutter  var(--flutter-duration) ease-in-out infinite var(--delay);
-        }
-        @keyframes fly{
-            0%   {transform:translateX(-10%) translateY(var(--y-start)) scaleX(var(--scale-x,1));}
-            50%  {transform:translateX(50%) translateY(calc(var(--y-start)+var(--amplitude,30vh))) scaleX(var(--scale-x,1));}
-            100% {transform:translateX(110%) translateY(var(--y-start)) scaleX(var(--scale-x,1));}
-        }
-        @keyframes flutter{
-            0%   {rotate:0deg;}
-            50%  {rotate:10deg;}
-            100% {rotate:0deg;}
-        }
-
-        /* ---------- 7️⃣ Мобильные стили (iPhone 14, прочие ≤420 px) ---------- */
-        @media (max-width:420px){
-            /* ← iPhone 14 и прочие маленькие экраны */
-
-            .hero{
-                padding:2.5rem 0.8rem;               /* чуть меньше отступов */
-                background:linear-gradient(135deg,#ffd1dc,#e6e6ff);
-            }
-            .hero h1{font-size:2rem;}
-            .hero .tagline{font-size:1rem;}
-
-            .card{
-                max-width:90%;                        /* почти на всю ширину */
-                margin:2rem auto 0;
-                padding:1.5rem 1rem;
-            }
-            .avatar{
-                width:120px;height:120px;            /* уменьшенный аватар */
-            }
-
-            .gallery h2{font-size:1.9rem;}
-            .grid{
-                grid-template-columns:repeat(auto-fill,minmax(140px,1fr));  /* чуть уже колонка */
-                gap:0.8rem;
-            }
-
-            /* При маленьком экране уменьшим количество бабочек (скрипт тоже подстроит) */
-            #butterfly-container{z-index:999; }      /* оставляем сверху, но не слишком «насыщенно» */
-        }
+        .grid a:hover img{transform:scale(1.05);}
     </style>
 </head>
 
 <body>
-    <!-- 1️⃣ Контейнер с бабочками -->
-    <div id="butterfly-container"></div>
 
-    <!-- 3️⃣ Основная карточка‑приветствие -->
+    <!-- Слой со «сердечным дождём» (он будет над всем, но под интерактивными элементами) -->
+    <div class="heartfield"></div>
+
+    <!-- Основная карточка‑приветствие -->
     <section class="card">
         <img src="img/photo.jpg" alt="Портрет Имя Фамилия" class="avatar">
-        <h1>Моя булочка</h1>
+        <h1>Самая лучшая булочка</h1>
         <p class="tagline">❤️❤️❤️❤️❤️</p>
         <nav class="links">
             <a href="https://www.instagram.com/natal_905/" target="_blank">Нажми на меня</a>
         </nav>
     </section>
 
-    <!-- 4️⃣ Галерея -->
+    <!-- Галерея -->
     <section class="gallery">
         <h2>Фоточки</h2>
         <div class="grid">
-            <a href="img/photo‑large1.jpg" data-lightbox="gallery"><img src="img/photo‑thumb1.jpg" alt="Снимок 1"></a>
-            <a href="img/photo‑large2.jpg" data-lightbox="gallery"><img src="img/photo‑thumb2.jpg" alt="Снимок 2"></a>
-            <a href="img/photo‑large3.jpg" data-lightbox="gallery"><img src="img/photo‑thumb3.jpg" alt="Снимок 3"></a>
+            <a href="img/photo‑thumb1.jpg" data-lightbox="gallery"><img src="img/photo‑thumb1.jpg" alt="Снимок 1"></a>
+            <a href="img/photo‑thumb2.jpg" data-lightbox="gallery"><img src="img/photo‑thumb2.jpg" alt="Снимок 2"></a>
+            <a href="img/photo‑thumb3.jpg" data-lightbox="gallery"><img src="img/photo‑thumb3.jpg" alt="Снимок 3"></a>
         </div>
     </section>
 
-    <!-- ====================  СКРИПТ ДЛЯ БАБОЧЕК  ==================== -->
+    <!-- ====================  СКРИПТ ДЛЯ ГЕНЕРАЦИИ СЕРДЕЧЕК  ==================== -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const container = document.getElementById('butterfly-container');
+        /* -----------------------------------------------------------------
+           Параметры «сердечек». При желании меняйте любые из них.
+              HEART_COUNT  – сколько одновременно будет на экране (≈ 70‑100)
+              MIN_SIZE     – минимальный размер в пикселях
+              MAX_SIZE     – максимальный размер в пикселях
+              MIN_SPEED    – минимальная «падения» (сек)
+              MAX_SPEED    – максимальная «падения» (сек)
+              MAX_DELAY    – максимальная случайная задержка перед стартом (сек)
+           ----------------------------------------------------------------- */
+        const HEART_COUNT = 80;
+        const MIN_SIZE   = 12;   // px
+        const MAX_SIZE   = 34;   // px
+        const MIN_SPEED  = 5;    // sec
+        const MAX_SPEED  = 13;   // sec
+        const MAX_DELAY  = 6;    // sec
 
-            /* Кол‑во бабочек зависит от ширины экрана:
-               • На ширине > 420 px – 30 штук (ПК)
-               • На мобильных ≤ 420 px – 15 штук (iPhone 14 и др.)          */
-            const isMobile = window.innerWidth <= 420;
-            const BUTTERFLY_COUNT = isMobile ? 15 : 30;
+        // Вариативные эмодзи‑сердца (можно добавить свои)
+        const HEARTS = ['❤️','💖','💗','💘','💙','💚','💛','💜','🧡','❣','💞','💕'];
 
-            for (let i = 0; i < BUTTERFLY_COUNT; i++) {
-                const el = document.createElement('div');
-                el.className = 'butterfly';
-                el.textContent = '🦋';                     // эмодзи‑бабочка
+        const field = document.querySelector('.heartfield');
 
-                // ---------- случайные параметры ----------
-                const size      = (Math.random() * 0.8 + 0.4).toFixed(2) + 'em'; // 0.4‑1.2 em
-                const yStart    = (Math.random() * 80).toFixed(2) + 'vh';      // 0‑80 vh
-                const scaleX    = Math.random() < 0.5 ? -1 : 1;               // направление
-                const duration  = (Math.random() * 10 + 8).toFixed(2) + 's'; // 8‑18 s полёт
-                const flutter   = (Math.random() * 2 + 1).toFixed(2) + 's';   // 1‑3 s «тряска»
-                const delay     = (Math.random() * 12).toFixed(2) + 's';     // задержка 0‑12 s
-                const amplitude = (Math.random() * 30 + 20).toFixed(2) + 'vh'; // подъём/спуск
+        for (let i = 0; i < HEART_COUNT; i++) {
+            const el = document.createElement('div');
+            el.className = 'heart';
+            el.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
 
-                // ---------- передаём в CSS‑переменные ----------
-                el.style.setProperty('--size', size);
-                el.style.setProperty('--y-start', yStart);
-                el.style.setProperty('--scale-x', scaleX);
-                el.style.setProperty('--duration', duration);
-                el.style.setProperty('--flutter-duration', flutter);
-                el.style.setProperty('--delay', delay);
-                el.style.setProperty('--amplitude', amplitude);
+            // случайный размер
+            const size = Math.random() * (MAX_SIZE - MIN_SIZE) + MIN_SIZE;
+            el.style.fontSize = `${size}px`;
 
-                container.appendChild(el);
-            }
-        });
+            // случайная позиция по горизонтали (0‑100 vw)
+            el.style.left = Math.random() * 100 + 'vw';
+
+            // случайная длительность анимации (падения)
+            const speed = Math.random() * (MAX_SPEED - MIN_SPEED) + MIN_SPEED;
+            el.style.animationDuration = `${speed}s`;
+
+            // случайная задержка, чтобы падения были непрерывными
+            const delay = Math.random() * MAX_DELAY;
+            el.style.animationDelay = `${delay}s`;
+
+            // небольшая вариация цвета – все оттенки розово‑красного
+            const hue = Math.random() * 20 + 340; // от 340° до 360° → розово‑красный
+            const sat = Math.random() * 20 + 70; // 70‑90%
+            const lig = Math.random() * 20 + 80; // 80‑100%
+            el.style.color = `hsl(${hue},${sat}%,${lig}%)`;
+
+            field.appendChild(el);
+        }
     </script>
 </body>
 </html>
