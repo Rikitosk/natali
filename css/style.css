@@ -129,3 +129,11 @@ h1 { margin: 1rem 0 .5rem; font-size: 1.8rem; }
         fly var(--duration) linear infinite var(--delay),
         flutter var(--flutter-duration) ease-in-out infinite var(--delay);
 }
+
+
+@media only screen
+  and (device-width:390px)
+  and (device-height:844px)
+  and (-webkit-device-pixel-ratio:3) {
+    /* любые уточнения только для iPhone 14 */
+}
