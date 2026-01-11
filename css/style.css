@@ -4,13 +4,12 @@
 *::after { box-sizing: border-box; margin: 0; }
 
 /* 2. Фоновый слой */
-body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f5f5f5;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+body{
+    display:block !important;    /* убираем flex‑центрирование */
+    min-height:100vh;
+    margin:0;
+    background:#f5f5f5;
+    font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 /* 3. Карточка */
@@ -137,3 +136,4 @@ h1 { margin: 1rem 0 .5rem; font-size: 1.8rem; }
   and (-webkit-device-pixel-ratio:3) {
     /* любые уточнения только для iPhone 14 */
 }
+
